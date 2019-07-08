@@ -103,6 +103,7 @@ angular.module('ngLocalize')
                         .then(function (data) {
                             var key,
                                 path = getPath(token);
+                            var data = data.data;
                             // Merge the contents of the obtained data into the stored bundle.
                             for (key in data) {
                                 if (data.hasOwnProperty(key)) {
@@ -120,7 +121,9 @@ angular.module('ngLocalize')
                             if (deferrences[path]) {
                                 deferrences[path].resolve(path);
                             }
+                            console.log('root', root);
                         }, function() {
+                            console.log('error');
                             $log.error('[localizationService] Failed to load: ' + url);
 
                             // We can try it again later.
@@ -282,7 +285,7 @@ angular.module('ngLocalize')
             return currentLocale;
         }
 
-        setLocale(cookieStore.get(localeConf.cookieName) ? cookieStore.get(localeConf.cookieName) : $window.navigator.userLanguage || $window.navigator.language);
+        setLocale(cookieStore ? cookieStore.get(localeConf.cookieName) : $window.navigator.userLanguage || $window.navigator.language);
 
         return {
             ready: ready,

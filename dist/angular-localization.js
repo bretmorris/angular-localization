@@ -121,9 +121,7 @@ angular.module('ngLocalize')
                             if (deferrences[path]) {
                                 deferrences[path].resolve(path);
                             }
-                            console.log('root', root);
                         }, function() {
-                            console.log('error');
                             $log.error('[localizationService] Failed to load: ' + url);
 
                             // We can try it again later.

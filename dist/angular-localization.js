@@ -20,7 +20,7 @@ angular.module('ngLocalize.InstalledLanguages', [])
         'en': 'en-US'
     });
 angular.module('ngLocalize')
-    .service('locale', function ($injector, $http, $q, $log, $rootScope, $window, localeConf, localeEvents, localeSupported, localeFallbacks) {
+    .service('locale', function ($cookies, $http, $q, $log, $rootScope, $window, localeConf, localeEvents, localeSupported, localeFallbacks) {
         var TOKEN_REGEX = new RegExp('^[\\w\\.-]+\\.[\\w\\s\\.-]+\\w(:.*)?$'),
 
             currentLocale,
@@ -28,8 +28,8 @@ angular.module('ngLocalize')
             bundles,
             cookieStore;
 
-        if (localeConf.persistSelection && $injector.has('$cookieStore')) {
-            cookieStore = $injector.get('$cookieStore');
+        if (localeConf.persistSelection) {            
+            cookieStore = $cookies;
         }
 
         function isToken(str) {
@@ -249,10 +249,12 @@ angular.module('ngLocalize')
         }
 
         function setLocale(value) {
+
+            
             var lang;
 
             if (angular.isString(value)) {
-                value = value.trim();
+                value = value.replace(/\"/g, '').trim();                
                 if (localeSupported.indexOf(value) !== -1) {
                     lang = value;
                 } else {
@@ -282,6 +284,7 @@ angular.module('ngLocalize')
         function getLocale() {
             return currentLocale;
         }
+
 
         setLocale(cookieStore ? cookieStore.get(localeConf.cookieName) : $window.navigator.userLanguage || $window.navigator.language);
 
